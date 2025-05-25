@@ -1,3 +1,23 @@
 .Game {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.GameMainContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.GameTopContainer {
+    display: flex;
+    flex-direction: row;
+    padding: 12px;
+}
+
+.GameSideMenu {
+    display: flex;
+    flex-direction: column;
+    padding: 8px 20px;
+    background-color: rgb(41, 41, 41);
 }

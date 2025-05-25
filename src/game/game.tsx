@@ -1,10 +1,11 @@
 import { createContext, useEffect, useReducer, type Context } from 'react'
-import { GameSideMenu } from './game-side-menu'
-import './game.css'
 import { drawSprite } from './sprites/draw-sprite'
 import type { Building } from './buildings/building'
 import { getBarnData } from './buildings/barn'
 import { Resource } from './resources/resource'
+import './game.css'
+import { GameTopContainer } from './game-top-container'
+import { GameMainContainer } from './game-main-container'
 
 interface GameState {
     test: boolean,
@@ -49,10 +50,8 @@ export const Game = () => {
     return (
         <>
             <div className={'Game'}>
-                <canvas id={'game-canvas'} width={'600'} height={'400'}></canvas>
-                <GameSideMenu props={{
-                    title: 'Farm Overview'
-                }}/>
+                <GameTopContainer />
+                <GameMainContainer />
             </div>
         </>
     )

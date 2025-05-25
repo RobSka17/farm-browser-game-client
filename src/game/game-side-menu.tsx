@@ -9,7 +9,7 @@ export const GameSideMenu = ({props} : { props: GameSideMenuProps }) => {
 
     return (
         <>
-            <div>
+            <div className={'GameSideMenu'}>
                 <span>{title}</span>
             </div>
         </>
