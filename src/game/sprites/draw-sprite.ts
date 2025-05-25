@@ -1,4 +1,4 @@
-interface DrawSpriteParams {
+export interface DrawSpriteParams {
     canvas: HTMLCanvasElement,
     name: string,
     format: string,
@@ -15,12 +15,16 @@ export function drawSprite(params: DrawSpriteParams) {
         y
     } = params
 
-    const ctx = canvas.getContext('2d')
-    if(ctx === null) {
-        console.error(`Failed to draw sprite ${name}.${format}. Canvas was null.`)
-        return
-    }
     const sprite = new Image()
-    sprite.src = `/sprites/${name}.${format}`
-    ctx.drawImage(sprite, x, y)
+    try {
+        const ctx = canvas.getContext('2d')
+        sprite.src = `/sprites/${name}.${format}`
+        if(ctx === null) throw new Error(`Failed to draw sprite ${name}.${format}.`)
+        ctx.drawImage(sprite, x, y)
+    }
+    catch(e) {
+        throw new Error(`Failed to draw sprite ${name}.${format}.`)
+    }
+
+    return sprite
 }
