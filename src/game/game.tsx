@@ -38,10 +38,11 @@ export const Game = () => {
             type: reducerKeys.OnLoadGame,
             payload: { canvas }
         })
+        const testImage = new Image()
+        testImage.src = '/sprites/barn.png'
         drawSprite({
             canvas,
-            name: 'barn',
-            format: 'png',
+            sprite: testImage,
             x: 100,
             y: 40
         })

@@ -1,30 +1,30 @@
 export interface DrawSpriteParams {
     canvas: HTMLCanvasElement,
-    name: string,
-    format: string,
+    sprite: HTMLImageElement,
     x: number,
     y: number
 }
 
-export function drawSprite(params: DrawSpriteParams) {
+export function drawSprite(params: DrawSpriteParams): Promise<HTMLImageElement> {
     const {
         canvas,
-        name,
-        format,
+        sprite,
         x,
         y
     } = params
 
-    const sprite = new Image()
-    try {
-        const ctx = canvas.getContext('2d')
-        sprite.src = `/sprites/${name}.${format}`
-        if(ctx === null) throw new Error(`Failed to draw sprite ${name}.${format}.`)
+    const ctx = canvas.getContext('2d')
+    if(ctx === null) throw new Error(`Failed to draw sprite ${sprite.src}`)
+
+    if(sprite.complete) {
         ctx.drawImage(sprite, x, y)
-    }
-    catch(e) {
-        throw new Error(`Failed to draw sprite ${name}.${format}.`)
+        return Promise.resolve(sprite)
     }
 
-    return sprite
+    return new Promise<HTMLImageElement>((resolve) => {
+        sprite.onload = () => {
+            ctx.drawImage(sprite, x, y)
+            resolve(sprite)
+        }
+    })
 }
