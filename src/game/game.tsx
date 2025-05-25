@@ -1,11 +1,11 @@
 import { createContext, useEffect, useReducer, type Context } from 'react'
-import { drawSprite } from './sprites/draw-sprite'
 import type { Building } from './buildings/building'
 import { getBarnData } from './buildings/barn'
 import { Resource } from './resources/resource'
-import './game.css'
 import { GameTopContainer } from './game-top-container'
 import { GameMainContainer } from './game-main-container'
+import { drawSprites } from './sprites/draw-sprites'
+import './game.css'
 
 interface GameState {
     test: boolean,
@@ -38,14 +38,7 @@ export const Game = () => {
             type: reducerKeys.OnLoadGame,
             payload: { canvas }
         })
-        const testImage = new Image()
-        testImage.src = '/sprites/barn.png'
-        drawSprite({
-            canvas,
-            sprite: testImage,
-            x: 100,
-            y: 40
-        })
+        drawSprites(canvas)
     }, [!state.canvas])
 
     return (
