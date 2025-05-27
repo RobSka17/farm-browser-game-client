@@ -28,21 +28,10 @@ export const useGameContext = () => useContext(GameContext)
 export const Game = () => {
     const [state, dispatch] = useReducer(rootReducer, initialState)
 
-    useEffect(() => {
-        // TODO: Update when API endpoint ready
-        fetchBuildingData(dispatch)
-        const canvas = document.getElementById('game-canvas') as HTMLCanvasElement
-        if(!canvas) return
-        dispatch({
-            type: reducerKeys.OnLoadGame,
-            payload: { canvas }
-        })
-        drawSprites(canvas)
-    }, [!state.canvas])
-
-    useEffect(() => {
-        console.log(state.buildingData)
-    }, [state.buildingData])
+    // TODO: Update when API endpoint ready
+    useEffect(() => { fetchBuildingData(dispatch) }, [])
+    useEffect(() => { setUpCanvas(dispatch) }, [!state.canvas])
+    useEffect(() => { console.log(state.buildingData) }, [state.buildingData])
 
     return (
         <>
@@ -65,6 +54,16 @@ async function fetchBuildingData(dispatch: ActionDispatch<[action: Action]>) {
         type: reducerKeys.OnFetchBuildingData,
         payload: { buildingData: response }
     })
+}
+
+function setUpCanvas(dispatch: ActionDispatch<[action: Action]>) {
+    const canvas = document.getElementById('game-canvas') as HTMLCanvasElement
+    if(!canvas) return
+    dispatch({
+        type: reducerKeys.OnLoadGame,
+        payload: { canvas }
+    })
+    drawSprites(canvas)
 }
 
 const reducerKeys = {

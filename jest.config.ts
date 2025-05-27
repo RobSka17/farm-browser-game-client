@@ -3,12 +3,14 @@ import type {Config} from 'jest'
 const config: Config = {
     preset: 'ts-jest/presets/default-esm',
     testEnvironment: 'jsdom',
-    extensionsToTreatAsEsm: ['.ts'],
+    extensionsToTreatAsEsm: ['.ts', '.tsx'],
     globals: {
         'ts-jest': {
-            useESM: true
+            useESM: true,
+            tsconfig: '<rootDir>/tsconfig.json'
         }
-    }
+    },
+    moduleNameMapper: { "\\.(css)$": "<rootDir>/src/css-mock.js" }
 }
 
 export default config
