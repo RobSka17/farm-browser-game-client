@@ -1,6 +1,10 @@
+import { useGameContext } from './game'
 import { GameSideMenu } from './game-side-menu'
 
 export const GameMainContainer = () => {
+    const gameContext = useGameContext()
+    console.log(gameContext)
+
     return (
         <>
             <div className={'GameMainContainer'}>

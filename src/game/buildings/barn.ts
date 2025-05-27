@@ -1,22 +1,11 @@
 import type { Building } from './building'
 
-export interface GetBarnDataParams {
-    level: number,
-    resource: string,
-    productionRate: number
-}
-
-export function getBarnData(params: GetBarnDataParams): Building {
-    const {
-        level,
-        resource,
-        productionRate
-    } = params
-
-    return {
-        level,
-        name: 'Barn',
-        resource,
-        productionRate
+export function getBarnData(buildingData: Building[]): Building {
+    try{
+        const barn = buildingData.find(b => b.name === 'Barn')
+        return barn as Building
+    }
+    catch(e) {
+        throw new Error('Failed to get barn from building data.')
     }
 }
