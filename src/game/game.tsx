@@ -1,25 +1,31 @@
 import { createContext, useContext, useEffect, useReducer, type ActionDispatch, type Context } from 'react'
-import type { Building } from './buildings/building'
+import type { Building } from './buildings/buildings'
 import { GameTopContainer } from './game-top-container'
 import { GameMainContainer } from './game-main-container'
 import { drawSprites } from './sprites/draw-sprites'
-import { mockBuildingDataResponse } from './buildings/mock-building-data-response'
-import { getBarnData } from './buildings/barn'
+import { mockBuildingsResponse } from './buildings/mock-buildings-response'
+import { getCattleBarnData } from './buildings/cattle-barn'
+import { getChickenCoopData } from './buildings/chicken-coop'
 import './game.css'
 
 interface GameState {
     canvas: HTMLCanvasElement | undefined,
-    buildingData: Building[] | undefined
+    buildings: Building[] | undefined
+    cattleBarn: Building | undefined,
+    chickenCoop: Building | undefined
 }
 
 interface GameContext {
     dispatch: ActionDispatch<[action: Action]>,
-    barn: Building | undefined
+    cattleBarn: Building | undefined,
+    chickenCoop: Building | undefined
 }
 
 const initialState : GameState = {
     canvas: undefined,
-    buildingData: []
+    buildings: [],
+    cattleBarn: undefined,
+    chickenCoop: undefined
 }
 
 const GameContext = createContext<GameContext | null>(null)
@@ -31,13 +37,14 @@ export const Game = () => {
     // TODO: Update when API endpoint ready
     useEffect(() => { fetchBuildingData(dispatch) }, [])
     useEffect(() => { setUpCanvas(dispatch) }, [!state.canvas])
-    useEffect(() => { console.log(state.buildingData) }, [state.buildingData])
+    useEffect(() => { getAllBuildingData(state.buildings as Building[], dispatch) }, [state.buildings])
 
     return (
         <>
             <GameContext.Provider value={{
                 dispatch,
-                barn: state.buildingData ? getBarnData(state.buildingData) : undefined
+                cattleBarn: state.cattleBarn,
+                chickenCoop: state.chickenCoop
             }}>
                 <div className={'Game'}>
                     <GameTopContainer />
@@ -49,10 +56,10 @@ export const Game = () => {
 }
 
 async function fetchBuildingData(dispatch: ActionDispatch<[action: Action]>) {
-    const response = await mockBuildingDataResponse()
+    const response = await mockBuildingsResponse()
     dispatch({
         type: reducerKeys.OnFetchBuildingData,
-        payload: { buildingData: response }
+        payload: { buildings: response }
     })
 }
 
@@ -66,19 +73,36 @@ function setUpCanvas(dispatch: ActionDispatch<[action: Action]>) {
     drawSprites(canvas)
 }
 
+function getAllBuildingData(buildings: Building[], dispatch: ActionDispatch<[action: Action]>) {
+    if(buildings.length < 1) return
+    const cattleBarn = getCattleBarnData(buildings)
+    const chickenCoop = getChickenCoopData(buildings)
+    dispatch({
+        type: reducerKeys.OnGetAllBuildingData,
+        payload: {
+            cattleBarn,
+            chickenCoop
+        }
+    })
+}
+
 const reducerKeys = {
     OnFetchBuildingData: 'ON_FETCH_BUILDING_DATA',
-    OnLoadGame: 'ON_LOAD_GAME'
+    OnLoadGame: 'ON_LOAD_GAME',
+    OnGetAllBuildingData: 'ON_GET_ALL_BUILDING_DATA'
 }
 
 const reducerMap = new Map([
     [reducerKeys.OnFetchBuildingData, onFetchBuildingData],
-    [reducerKeys.OnLoadGame, onLoadGame]
+    [reducerKeys.OnLoadGame, onLoadGame],
+    [reducerKeys.OnGetAllBuildingData, onGetAllBuildingData]
 ])
 
 interface Payload {
-    buildingData?: Building[],
+    buildings?: Building[],
     canvas?: HTMLCanvasElement,
+    cattleBarn?: Building,
+    chickenCoop?: Building
 }
 
 interface Action {
@@ -94,12 +118,12 @@ function rootReducer(state : GameState, action : Action) {
 
 function onFetchBuildingData(state : GameState, action : Action) {
     const {
-        buildingData
+        buildings
     } = action.payload
 
     return {
         ...state,
-        buildingData
+        buildings
     }
 }
 
@@ -111,5 +135,18 @@ function onLoadGame(state : GameState, action : Action) {
     return {
         ...state,
         canvas
+    }
+}
+
+function onGetAllBuildingData(state: GameState, action : Action) {
+    const {
+        cattleBarn,
+        chickenCoop
+    } = action.payload
+
+    return {
+        ...state,
+        cattleBarn,
+        chickenCoop
     }
 }

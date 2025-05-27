@@ -4,11 +4,11 @@ const config: Config = {
     preset: 'ts-jest/presets/default-esm',
     testEnvironment: 'jsdom',
     extensionsToTreatAsEsm: ['.ts', '.tsx'],
-    globals: {
-        'ts-jest': {
+    transform: {
+        '^.+\\.tsx?$': ['ts-jest', {
             useESM: true,
-            tsconfig: '<rootDir>/tsconfig.json'
-        }
+            tsconfig: '<rootDir>/tsconfig.json',
+        }]
     },
     moduleNameMapper: { "\\.(css)$": "<rootDir>/src/css-mock.js" }
 }

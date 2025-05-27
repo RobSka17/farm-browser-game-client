@@ -4,3 +4,8 @@ export interface Building {
     resource: string
     productionRate: number
 }
+
+export const Buildings = {
+    CattleBarn: 'Cattle Barn',
+    ChickenCoop: 'Chicken Coop'
+}
