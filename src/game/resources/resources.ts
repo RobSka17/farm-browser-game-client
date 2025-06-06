@@ -1,5 +1,7 @@
 export const Resources = {
     Wheat: 'Wheat',
     Eggs: 'Eggs',
-    Milk: 'Milk'
+    Milk: 'Milk',
+    Flour: 'Flour',
+    Cheese: 'Cheese'
 }

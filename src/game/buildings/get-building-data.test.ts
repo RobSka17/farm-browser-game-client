@@ -10,7 +10,7 @@ describe('Gets building data', () => {
         expect(barnData.level).toBe(1)
         expect(barnData.name).toBe(Buildings.CattleBarn)
         expect(barnData.resource).toBe(Resources.Milk)
-        expect(barnData.productionRate).toBe(20)
+        expect(barnData.outputRate).toBe(20)
     })
 
     it('Fails to get barn data if response empty', () => {
